@@ -10,21 +10,27 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 public class SelenideCardTest {
-    public String localDate(int day) {
-        return LocalDate.now().plusDays(day).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    private String generateDate(int addDays, String pattern) {
+        return LocalDate.now().plusDays(addDays).format(DateTimeFormatter.ofPattern(pattern));
     }
     @Test
     void shouldDeliveryCard() {
-        open("http://localhost:9999/");
-        $("[data-test-id='city' ] input").setValue("Краснодар");
-        $("[data-test-id='date'] input").sendKeys(Keys.SHIFT, Keys.HOME, Keys.BACK_SPACE);
-        $("[data-test-id='date'] input").setValue(localDate(5));
+        open("http://localhost:9999");
+        $("[data-test-id='city'] input").setValue("Краснодар");
+        String currentDate = generateDate(4, "dd.MM.yyyy");
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+        $("[data-test-id='date'] input").sendKeys(currentDate);
         $("[data-test-id='name'] input").setValue("Гонтарь Наталья");
         $("[data-test-id='phone'] input").setValue("+79999999999");
         $("[data-test-id='agreement']").click();
-        $(".button__content").click();
-        $(".notification__content").shouldHave(Condition.text("Встреча успешно забронирована на " + localDate(3)), Duration.ofSeconds(15)).shouldBe(Condition.visible);
+        $("button.button").click();
+        $(".notification__content")
+                .shouldBe(Condition.visible, Duration.ofSeconds(17))
+                .shouldHave(Condition.exactText("Встреча успешно забронирована на " + currentDate));
+
+
     }
 }
+
 
 
