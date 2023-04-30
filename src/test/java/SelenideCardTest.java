@@ -18,7 +18,7 @@ public class SelenideCardTest {
         open("http://localhost:9999/");
         $("[data-test-id='city' ] input").setValue("Краснодар");
         $("[data-test-id='date'] input").sendKeys(Keys.SHIFT, Keys.HOME, Keys.BACK_SPACE);
-        $("[data-test-id='date'] input").setValue(localDate(2));
+        $("[data-test-id='date'] input").setValue(localDate(5));
         $("[data-test-id='name'] input").setValue("Гонтарь Наталья");
         $("[data-test-id='phone'] input").setValue("+79999999999");
         $("[data-test-id='agreement']").click();
